@@ -156,12 +156,13 @@
   individual
   inherited)
 
-(defparameter *case-sensitive-readtable* (copy-readtable nil))
-(setf (readtable-case *case-sensitive-readtable*) :preserve)
+(defparameter *cost-centre-readtable* (copy-readtable nil))
+(setf (readtable-case *cost-centre-readtable*) :preserve)
+(set-syntax-from-char #\' #\a *cost-centre-readtable*)
 
 (defun parse-line (line)
   (let* ((*read-eval* nil)
-         (*readtable* *case-sensitive-readtable*)
+         (*readtable* *cost-centre-readtable*)
          (list-str (concatenate 'string "(" line ")"))
          (list (read-from-string list-str)))
     (destructuring-bind
