@@ -1,0 +1,19 @@
+viewprof
+========
+
+Usage: viewprof.lisp PROG.prof
+
+Keys:
+
+j      - move one line down
+k      - move one line up
+Ctrl-d - move down half a page
+Ctrl-u - move up half a page
+space  - fold/unfold a subtree
+h      - scroll to the left
+l      - scroll to the right
+r      - enter/leave `bottom-up mode'
+q      - exit the program
+
+In `bottom-up mode' the parent-child relationship of the tree structure will be reversed,
+which means a function becomes a parent of its caller.
