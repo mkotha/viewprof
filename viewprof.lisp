@@ -158,7 +158,8 @@
 
 (defparameter *cost-centre-readtable* (copy-readtable nil))
 (setf (readtable-case *cost-centre-readtable*) :preserve)
-(set-syntax-from-char #\' #\a *cost-centre-readtable*)
+(dolist (ch '(#\' #\# #\. #\\ #\| #\:))
+  (set-syntax-from-char ch #\a *cost-centre-readtable*))
 
 (defun parse-line (line)
   (let* ((*read-eval* nil)
