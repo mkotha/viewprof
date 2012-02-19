@@ -171,7 +171,6 @@
 
 (defun words (string)
   (let ((current-word nil)
-        (in-word nil)
         (result nil))
     (loop for ch across (concatenate 'string (reverse string) (list #\Space))
           do (cond
