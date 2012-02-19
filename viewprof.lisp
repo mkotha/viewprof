@@ -156,25 +156,31 @@
   individual
   inherited)
 
-(defparameter *cost-centre-readtable* (copy-readtable nil))
-(setf (readtable-case *cost-centre-readtable*) :preserve)
-(dolist (ch '(#\' #\# #\. #\\ #\| #\:))
-  (set-syntax-from-char ch #\a *cost-centre-readtable*))
-
 (defun parse-line (line)
-  (let* ((*read-eval* nil)
-         (*readtable* *cost-centre-readtable*)
-         (list-str (concatenate 'string "(" line ")"))
-         (list (read-from-string list-str)))
+  (let ((*read-eval* nil)
+        (list (words line)))
     (destructuring-bind
         (name module idnum count idtime idalloc ihtime ihalloc) list
       (make-line
-        :name name
-        :module module
-        :idnum idnum
-        :count count
-        :individual (cons idtime idalloc)
-        :inherited (cons ihtime ihalloc)))))
+        :name (intern name)
+        :module (intern module)
+        :idnum (parse-integer idnum)
+        :count (parse-integer count)
+        :individual (cons (read-from-string idtime) (read-from-string idalloc))
+        :inherited (cons (read-from-string ihtime) (read-from-string ihalloc))))))
+
+(defun words (string)
+  (let ((current-word nil)
+        (in-word nil)
+        (result nil))
+    (loop for ch across (concatenate 'string (reverse string) (list #\Space))
+          do (cond
+               ((not (eq ch #\Space))
+                (setf current-word (cons ch current-word)))
+               (current-word
+                (setf result (cons (concatenate 'string current-word) result))
+                (setf current-word nil))))
+    result))
 
 (defun trees-from-file (file)
   (mapcar (lambda (tree) (maptree #'parse-line tree))
